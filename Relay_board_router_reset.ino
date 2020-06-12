@@ -1,8 +1,6 @@
-
-
-// ESP Relay board router autoresetter.
+// ESP Relay board router autoresetter. v0.2
 // by G0LFP
-// Has no actual functionality, but enables a wifi update client.
+// 
 // Other than checking for internet connectivity. If it can't see out, it power cycles the router
 // http://192.168.x.y/?relay=1 to turn the relay on
 // http://192.168.x.y/?relay=0 to turn the relay off again
@@ -65,6 +63,7 @@ int counter;
 
 void setup() 
 {
+  // added at v0.2
   // Wait at least 10 seconds until trying to connect to the wifi. 
   // The ESP reboots and starts a lot faster than my router, so fails to connect to the WiFi
 
@@ -136,9 +135,9 @@ void loop(void)
   // 
   
   String pageToLoad = "http://www.5and9.co.uk/test.php?ip="; // This chunk of code enables me to see it call my server
-    pageToLoad += WiFi.localIP().toString();                 //  and post its ID and IP address.
-    pageToLoad += "&id=";
-    pageToLoad += ESP.getChipId();
+    pageToLoad += WiFi.localIP().toString();                 //  and post its ID and IP address. 
+    pageToLoad += "&id=";                                    // No problem using my server if you wish, but you can't see your IP
+    pageToLoad += ESP.getChipId();                           // ...and you might reset if my server stop responding!! 
     Serial.println(pageToLoad);
   http.begin(pageToLoad); 
   int httpCode = http.GET();
@@ -198,7 +197,7 @@ void loop(void)
       digitalWrite(RELAYPIN,LOW);
         Serial.println("Relay = Off");
         relayStatus = 0;
-        delay(10000); // to allow router to come back up before proceeding.. This could probably be a lot shorter.
+        delay(10000); // added at v0.2 To allow router to come back up before proceeding.. This could probably be a lot shorter.
     }     
     }
 
