@@ -65,6 +65,12 @@ int counter;
 
 void setup() 
 {
+  // Wait at least 10 seconds until trying to connect to the wifi. 
+  // The ESP reboots and starts a lot faster than my router, so fails to connect to the WiFi
+
+  delay(10000);
+  
+  
   // Setup code goes here, runs once
   Serial.begin(115200);
   pinMode(LEDPIN,OUTPUT);
@@ -129,7 +135,7 @@ void loop(void)
   // If this is a remote monitor, it will probbly want to call a server page and pass data.
   // 
   
-  String pageToLoad = "http://www.mydomain/test.php?ip="; // This chunk of code enables me to see it call my server
+  String pageToLoad = "http://www.5and9.co.uk/test.php?ip="; // This chunk of code enables me to see it call my server
     pageToLoad += WiFi.localIP().toString();                 //  and post its ID and IP address.
     pageToLoad += "&id=";
     pageToLoad += ESP.getChipId();
@@ -168,7 +174,7 @@ void loop(void)
       }
       // 10 minutes later, we'll check again and if nothing we toggle to reset.
 
-      String pageToLoad = "http://www.mydomain/failover.php?ip="; // This chunk of code enables me to see it call my server
+      String pageToLoad = "http://www.5and9.co.uk/failover.php?ip="; // This chunk of code enables me to see it call my server
     pageToLoad += WiFi.localIP().toString();                 //  and post its ID and IP address.
     pageToLoad += "&id=";
     pageToLoad += ESP.getChipId();
@@ -180,7 +186,6 @@ void loop(void)
     {    
       // If we saw the server do nothing.... everything is OK afterall.
       // httpCode should be a negative number.. >0 means that no connecyion could be made.
-      // This is fine until you get a 404 or similar. 404 is > 0 so it doesn't behave quite like you would expect.
     }
     else
     {
@@ -193,6 +198,7 @@ void loop(void)
       digitalWrite(RELAYPIN,LOW);
         Serial.println("Relay = Off");
         relayStatus = 0;
+        delay(10000); // to allow router to come back up before proceeding.. This could probably be a lot shorter.
     }     
     }
 
